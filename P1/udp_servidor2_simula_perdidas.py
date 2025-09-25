@@ -13,6 +13,9 @@ def main():
 	# Bucle infinito 
 	while True:
 		data,adress = server_socket.recvfrom(1024)
-		print(f"Mensaje recibido: '{data.decode{}' from {adress}")
+	    if random.randint(0, 1) == 0:
+                print("Simulando paquete perdido")
+            else:
+                print(f"Received message: '{data.decode()}' from {address}")
 
 	server_socket.close()
