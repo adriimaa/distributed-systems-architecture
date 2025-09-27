@@ -1,18 +1,25 @@
- import socket
+import socket
+import sys
 
- cliente_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
- sock.bind(("82.2.5.23", 9999))
+if len(sys.argv) > 2:
+    IP_SERVIDOR = sys.argv[1]
+    PUERTO_SERVIDOR = int.argv[2]
+else:
+    IP_SERVIDOR = "localhost"
+    PUERTO_SERVIDOR = 9999
 
- while True:
-	message = "da"
-	# Get input from the user
-        message = input("> ")
+dir_servidor = (IP_SERVIDOR, PUERTO_SERVIDOR)
 
-        # If the user types 'FIN', break the loop
-        if message == "FIN":
-            break
+#Creamos el socket UDP
+sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-        # Send the message to the server
-            client_socket.sendto(message.encode(), server_address)
+#Bucle para leer texto del teclado y enviarlo.
+while True:
+    mensaje = input("Introduce un mensaje para enviar (o 'FIN' para terminar): ")
+    if mensaje == "FIN":
+        break
 
-socket.close()
+    sock.sendto(mensaje.encode("uft-8"), dir_servidor)
+
+print("Cerrando cliente...")
+sock.close()
