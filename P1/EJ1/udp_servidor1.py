@@ -17,7 +17,7 @@ print(f"Servidor UDP escuchando en el puerto {puerto}")
 #Bucle infinito:
 while True:
 	mensaje,dir=sock.recvfrom(1024)
-	mensaje = mensaje.decode("uft-8")
+	mensaje = mensaje.decode("utf-8")
 
 	print(f"Mensaje recibido de {dir}: {mensaje}")
 
