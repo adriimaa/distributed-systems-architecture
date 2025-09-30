@@ -24,7 +24,7 @@ while True:
     mensaje_secuencia = f"{num}: {mensaje_user}"
 
     print(f"Enviando: '{mensaje_secuencia}'")
-    sock.sendto(mensaje_secuencia.encode("uft-8"), dir_servidor)
+    sock.sendto(mensaje_secuencia.encode("utf-8"), dir_servidor)
 
     num += 1
 
