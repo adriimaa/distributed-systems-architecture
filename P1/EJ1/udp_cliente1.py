@@ -19,7 +19,7 @@ while True:
     if mensaje == "FIN":
         break
 
-    sock.sendto(mensaje.encode("uft-8"), dir_servidor)
+    sock.sendto(mensaje.encode("utf-8"), dir_servidor)
 
 print("Cerrando cliente...")
 sock.close()
