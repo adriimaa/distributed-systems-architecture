@@ -1,0 +1,7 @@
+# Servidores
+docker run -d --name servidor_bcast_1 --network pruebas -v $(pwd):/app python:3.7 python3 /app/udp_servidor6_broadcast.py
+docker run -d --name servidor_bcast_2 --network pruebas -v $(pwd):/app python:3.7 python3 /app/udp_servidor6_broadcast.py
+docker run -d --name servidor_bcast_3 --network pruebas -v $(pwd):/app python:3.7 python3 /app/udp_servidor6_broadcast.py
+
+# Cliente
+docker run -it --network pruebas -v $(pwd):/app python:3.7 python3 /app/udp_cliente6_broadcast.py 172.18.255.255 12345
