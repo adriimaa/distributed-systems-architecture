@@ -37,7 +37,7 @@ while True:
                 confirmacion_recibida = True
         except socket.timeout:
             print("Timeout. Reintentando...")
-            timeout_actual *= 2
+            timeout_inicial *= 2
 
     if not confi_recibida:
         print("Puede q el server este caido, Intentelo mas tarde")
