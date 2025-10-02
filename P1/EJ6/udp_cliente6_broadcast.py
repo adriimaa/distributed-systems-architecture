@@ -36,7 +36,7 @@ if servidores:
 
     sock.sendto(b"HOLA",servidor1)
     respuesta, _ = sock.recvfrom(1024)
-    print(f"Respuesta del servidor: {respuesta.decode('uft-8')}")
+    print(f"Respuesta del servidor: {respuesta.decode('utf-8')}")
 else:
     print("\n No se encontraron servers 'HOLA' ")
 
