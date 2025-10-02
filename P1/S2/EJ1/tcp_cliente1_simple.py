@@ -16,10 +16,13 @@ print(f"Conectado al servidor en {ip_servidor}, {puerto_servidor}")
 mensaje = b"ABCDE"
 # Enviar los 5 bytes en tantas veces como sea necesario
 while mensaje != b"":
-    enviados = s.send(mensaje)
-    mensaje=mensaje[enviados:]    # Reasignar los restantes
+    mensaje = "ABCDE"
+    print(f"Enviando: '{mensaje}'")
+    s.send(mensaje.encode("ascii"))    
 
-print(f"{mensaje}")
+mensaje_final = "FINAL"
+print(f"Enviando: '{mensaje_final}'")
+s.send(mensaje_final.encode("ascii"))
 
 s.close()
 print("Socket cerrado. Terminando cliente.")
