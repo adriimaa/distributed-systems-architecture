@@ -13,14 +13,14 @@ s.connect((ip_servidor, puerto_servidor))
 print(f"Conectado al servidor en {ip_servidor}, {puerto_servidor}")
 
 
-mensaje = b"ABCDE"
-# Enviar los 5 bytes en tantas veces como sea necesario
-
-s.sendall(mensaje)
-print(f"Mensaje '{mensaje.encode('ascii')}' enviado completamente.")
+for i in range(5):
+    mensaje = b"ABCDE"
+    print(f"Enviando: '{mensaje}'")
+    s.sendall(mensaje.encode('ascii'))
   
-s.sendall(b"FINAL")
-print("Mensaje 'FINAL' enviado.")
+mensaje_final = "FINAL"
+print(f"Enviando: '{mensaje_final}'")
+s.sendall(mensaje_final.encode("ascii"))
 
 s.close()
 print("Socket cerrado. Terminando cliente.")
