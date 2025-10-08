@@ -3,20 +3,14 @@ import sys
 
 # Se añade la función recvall
 def recvall(sock, num_bytes):
-    """
-    Función que recibe exactamente num_bytes de un socket.
-    Usa un bucle para asegurar que se leen todos los datos solicitados.
-    """
-    chunks = []
-    bytes_recibidos = 0
-    while bytes_recibidos < num_bytes:
-        chunk = sock.recv(num_bytes - bytes_recibidos)
-        if chunk == b'':
-            raise RuntimeError("Conexión del socket rota")
-        chunks.append(chunk)
-        bytes_recibidos = bytes_recibidos + len(chunk)
     
-    return b''.join(chunks).decode('ascii')
+    datos_recibidos =b"" 
+    while len(datos_recibidos) < num_bytes:
+        fragmento = sock.recv(num_bytes- len(datos_recibidos))
+        if not fragmento:
+            return None
+        datos_recibidos+=fragmento
+    return datos_recibidos
 
 if len(sys.argv) > 1:
     puerto = int(sys.argv[1])
@@ -48,6 +42,6 @@ while True:
             print("Recibido mensaje de finalización")
             sd.close()
             continuar = False
-        else:
-            print("Recibido mensaje: %s" % datos)
+sd.close()
+print("Socket de datos cerrado. Esperando nuevo cliente")           
 
