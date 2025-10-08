@@ -21,14 +21,13 @@ while True:
     continuar = True
     # Bucle de atención al cliente conectado
     while continuar:
-        datos_bytes = sd.recv(5)
-        
+        datos_bytes = sd.recv(80)
         
         if not datos_bytes:
             print("Conexión cerrada por el cliente.")
             continuar = False
         else:
-            mensaje = datos_bytes.encode("utf-8")
+            mensaje = datos_bytes.decode("utf-8")
             # Le quitamos el delimitador "\r\n"
             linea = mensaje[:-2]
             # Invertimos la línea.
@@ -38,5 +37,5 @@ while True:
             
             sd.sendall(respuesta.encode("utf-8"))
 
-sd.close()
-print("Socket cerrado")
+    sd.close()
+    print("Socket cerrado")
