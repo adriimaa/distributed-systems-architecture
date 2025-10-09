@@ -13,9 +13,9 @@ s.connect((ip_servidor, puerto_servidor))
 print(f"Conectado al servidor en {ip_servidor}, {puerto_servidor}")
 
 
-mensaje = b"ABCDE"
+
 # Enviar los 5 bytes en tantas veces como sea necesario
-while mensaje != b"":
+for _ in range(5):
     mensaje = "ABCDE"
     print(f"Enviando: '{mensaje}'")
     s.send(mensaje.encode("ascii"))    
