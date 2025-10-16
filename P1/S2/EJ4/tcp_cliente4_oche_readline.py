@@ -12,7 +12,7 @@ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.connect((ip_servidor, puerto_servidor))
 print(f"Conectado al servidor en {ip_servidor}, {puerto_servidor}")
 
-f = s.makefile(mode='rw', encoding='utf-8', newline='\r\n')
+f = s.makefile(encoding='utf-8', newline='\r\n')
 
 mensajes = ["Hola", "Mundo", "Sistemas Distribuidos"]
 
@@ -20,12 +20,13 @@ for msg in mensajes:
     # Añadimos el delimitador \r\n
     mensaje_a_enviar = msg + "\r\n"
     
-    print(repr(mensaje_a_enviar))
+    s.sendall(mensaje_a_enviar.encode("utf-8"))
     f.write(mensaje_a_enviar)
 
     # Recibimos la respuesta
     respuesta = f.readline()
-    print(f"Recibido: {repr(respuesta)}")
+    s.sendall(respuesta.encode("utf-8"))
+
 
 f.close()
 s.close()
