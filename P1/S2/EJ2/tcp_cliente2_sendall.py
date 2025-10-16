@@ -14,9 +14,10 @@ print(f"Conectado al servidor en {ip_servidor}, {puerto_servidor}")
 
 mensaje = b"ABCDE"
 
-while mensaje != b"":
-    enviados = s.send(mensaje)
-    mensaje=mensaje[enviados:]
+for _ in range(5):
+    mensaje = "ABCDE"
+    print(f"Enviando: '{mensaje}'")
+    s.sendall(mensaje) 
   
 mensaje_final = "FINAL"
 print(f"Enviando: '{mensaje_final}'")
