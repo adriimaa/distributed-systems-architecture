@@ -35,8 +35,9 @@ while True:
         else:
             # Le quitamos el delimitador "\r\n"
             linea = mensaje[:-2]
+            linea_sin_salto = mensaje.strip()
             # Invertimos la línea.
-            linea_invertida = linea[::-1]
+            linea_invertida = linea_sin_salto[::-1]
             
             # Preparamos la respuesta añadiendo el delimitador.
             respuesta = linea_invertida + "\r\n"
