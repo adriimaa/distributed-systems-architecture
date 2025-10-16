@@ -1,6 +1,16 @@
 import socket
 import sys
 
+def recvall(sock, num_bytes):
+    
+    datos_recibidos =b"" 
+    while len(datos_recibidos) < num_bytes:
+        fragmento = sock.recv(num_bytes- len(datos_recibidos))
+        if not fragmento:
+            return None
+        datos_recibidos+=fragmento
+    return datos_recibidos
+
 def recibe_longitud(sd):
 
     long = b""
@@ -34,7 +44,7 @@ for msg in mensajes:
 
     # Recibimos la respuesta
     longitud = recibe_longitud(s)
-    mensaje = s.recv(longitud)
+    mensaje = s.recvall(longitud)
     mensaje = mensaje.decode("utf-8")
     print(f"Recibido: {repr(mensaje)}")
     
