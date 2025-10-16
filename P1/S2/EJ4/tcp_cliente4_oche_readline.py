@@ -21,12 +21,10 @@ for msg in mensajes:
     mensaje_a_enviar = msg + "\r\n"
     
     s.sendall(mensaje_a_enviar.encode("utf-8"))
-    f.write(mensaje_a_enviar)
-
+    print(repr(mensaje_a_enviar))
     # Recibimos la respuesta
     respuesta = f.readline()
-    s.sendall(respuesta.encode("utf-8"))
-
+    print(f"Recibido: {repr(respuesta)}")
 
 f.close()
 s.close()
