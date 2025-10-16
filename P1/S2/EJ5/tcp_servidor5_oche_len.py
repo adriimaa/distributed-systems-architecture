@@ -43,9 +43,15 @@ while True:
 
     while True:
         longitud = recibe_longitud(sd)
+        if longitud is None:
+            print("Conexión cerrada por el cliente.")
+            break
 
         mensaje = recvall(sd, longitud)
-
+        if mensaje is None:
+            print("Conexión cerrada inesperadamente por el cliente.")
+            break
+        
         print(f"Recibido ({longitud} bytes): {mensaje.decode('utf-8')}")
         
         mensaje_invertido_bytes = mensaje[::-1]
