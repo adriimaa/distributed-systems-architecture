@@ -15,7 +15,7 @@ print(f"Conectado al servidor en {ip_servidor}, {puerto_servidor}")
 mensaje = b"ABCDE"
 
 for _ in range(5):
-    mensaje = "ABCDE"
+    mensaje = b"ABCDE"
     print(f"Enviando: '{mensaje}'")
     s.sendall(mensaje) 
   
