@@ -44,7 +44,7 @@ for msg in mensajes:
 
     # Recibimos la respuesta
     longitud = recibe_longitud(s)
-    mensaje = s.recvall(longitud)
+    mensaje = recvall(s, longitud)
     mensaje = mensaje.decode("utf-8")
     print(f"Recibido: {repr(mensaje)}")
     
