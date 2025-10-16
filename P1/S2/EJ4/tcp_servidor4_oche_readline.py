@@ -21,22 +21,26 @@ while True:
     print("Nuevo cliente conectado desde %s, %d" % origen)
     
     time.sleep(1)
-    f=sd.makefile(mode="rw",encoding="utf-8",newline="\r\n")
+    f=sd.makefile(encoding="utf-8",newline="\r\n")
     
-    while True:
-        linea = f.readline()
-        print(f"Recibido:{repr(linea)}")
+    continuar = True
+    # Bucle de atención al cliente conectado
+    while continuar:
+        mensaje = f.readline()
         
-        if not linea:
+        if not mensaje:
             print("Conexión cerrada por el cliente.")
-            break
-        
-        linea_sin_salto=linea.strip()
-        linea_invertida=linea_sin_salto[::-1]
-        
-        respuesta=linea_invertida
-        print(f"Enviando:{repr(respuesta+f.newlines)}")
-        f.write(respuesta+f.newlines)
+            sd.close()
+            continuar = False
+        else:
+            # Le quitamos el delimitador "\r\n"
+            linea = mensaje[:-2]
+            # Invertimos la línea.
+            linea_invertida = linea[::-1]
+            
+            # Preparamos la respuesta añadiendo el delimitador.
+            respuesta = linea_invertida + "\r\n"
+            sd.sendall(respuesta.encode("utf-8"))
         
 f.close()
 sd.close()
