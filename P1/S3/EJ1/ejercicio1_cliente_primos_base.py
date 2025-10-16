@@ -28,6 +28,6 @@ while True:
         print(data)
 
     # Si se ha recibido "FIN", salir del bucle
-    if "FIN" in data:
-        cliente_socket.close()
-        break
+        if "FIN" in data:
+            cliente_socket.close()
+            break

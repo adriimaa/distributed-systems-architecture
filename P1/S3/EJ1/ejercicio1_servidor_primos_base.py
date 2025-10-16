@@ -46,7 +46,7 @@ while True:
         if es_primo(candidato):
             primos.append(candidato)
 
-        if len(primos) % 5 == 0:
+        if len(primos) % 5 == 0 and len(primos) != numero:
             mensaje = "Se han calculado %i de los %i números primos solicitados\n" % (len(primos), numero)
             cliente_socket.sendall(mensaje.encode())
         candidato += 1
