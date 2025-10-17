@@ -12,10 +12,8 @@ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.connect((ip_servidor, puerto_servidor))
 print(f"Conectado al servidor en {ip_servidor}, {puerto_servidor}")
 
-mensaje = b"ABCDE"
-
 for _ in range(5):
-    mensaje = b"ABCDE"
+    mensaje = "ABCDE"
     print(f"Enviando: '{mensaje}'")
     s.sendall(mensaje.encode("ascii")) 
   
