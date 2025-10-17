@@ -17,7 +17,7 @@ mensaje = b"ABCDE"
 for _ in range(5):
     mensaje = b"ABCDE"
     print(f"Enviando: '{mensaje}'")
-    s.sendall(mensaje) 
+    s.sendall(mensaje.encode("ascii")) 
   
 mensaje_final = "FINAL"
 print(f"Enviando: '{mensaje_final}'")
