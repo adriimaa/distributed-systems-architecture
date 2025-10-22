@@ -1,7 +1,8 @@
+# ejercicio3_servidor_primos_fork.py
 import sys
 import socket
 import time
-import threading
+import os
 
 def es_primo(numero):
     if numero < 2:
@@ -12,12 +13,14 @@ def es_primo(numero):
             return False
     return True
 
-def calcular_cliente(num_hilo, cliente_socket, cliente_address):
-    print("Soy el hilo %i" % num_hilo)
+#Sustituimos los hilos por procesos.
+def calcular_cliente(num_proceso, cliente_socket, cliente_address):
+    print("Soy el proceso %i (PID: %i)" % (num_proceso, os.getpid()))
+    
     # Recibir la cantidad de primos a calcular
     data = cliente_socket.recv(1024).decode()
     numero = int(data)
-    print("Calculando los primeros %i números primos para el hilo %i..." % (numero, num_hilo))
+    print("Calculando los primeros %i números primos para el proceso %i..." % (numero, num_proceso))
 
     # Calcular los números primos
     primos = []
@@ -25,45 +28,51 @@ def calcular_cliente(num_hilo, cliente_socket, cliente_address):
     while len(primos) < numero:
         if es_primo(candidato):
             primos.append(candidato)
-            # Enviar mensaje por cada 5 primos calculados
-            if len(primos) % 5 == 0:
+
+            if len(primos) % 5 == 0 and len(primos) != numero:
                 mensaje = "Se han calculado %i de los %i números primos solicitados\n" % (len(primos), numero)
                 cliente_socket.sendall(mensaje.encode())
+        
         candidato += 1
 
-    # Enviar la lista completa al cliente
+    # Enviar la lista completa
     mensaje = "Primos:" + str(primos)
     cliente_socket.sendall(mensaje.encode())
 
     # Enviar "FIN" para indicar el final y cerrar el socket
     cliente_socket.sendall("FIN".encode())
     cliente_socket.close()
-    print("Conexión cerrada con:", cliente_address, "desde el hilo", num_hilo)
+    print("Proceso %i completado. Conexión cerrada con: %s" % (num_proceso, cliente_address))
 
 if len(sys.argv) != 2:
     print("Uso: servidor.py puerto")
     sys.exit(1)
 
-puerto_servidor = sys.argv[1]
+puerto_servidor = int(sys.argv[1])
 
-# Crear el socket TCP
 servidor_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-# Vincular el socket al puerto especificado
-servidor_socket.bind(('', int(puerto_servidor)))
+servidor_socket.bind(('', puerto_servidor))
 
-# Escuchar por conexiones entrantes
 servidor_socket.listen(4)
 
 print("El servidor está listo para recibir conexiones")
-num_hilo = 0
+num_proceso = 0
 
 while True:
-# Esperar a que llegue una conexión
-    print("- Hilo principal esperando cliente -")
+    # Esperar a que llegue una conexión
+    print("- Proceso padre esperando cliente -")
     cliente_socket, cliente_address = servidor_socket.accept()
     print("Conexión establecida desde:", cliente_address)
-    # Crear un subproceso para manejar al cliente
-    cliente_thread = threading.Thread(target=calcular_cliente, args=(num_hilo, cliente_socket, cliente_address))
-    cliente_thread.start()
-    num_hilo += 1
+
+    # Crear un proceso hijo 
+    pid = os.fork()
+    
+    if pid == 0:
+        # Proceso hijo
+        servidor_socket.close()
+        calcular_cliente(num_proceso, cliente_socket, cliente_address)
+        sys.exit()  # Finaliza el proceso hijo
+    else:
+        # Proceso padre
+        cliente_socket.close()
