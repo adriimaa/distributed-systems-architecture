@@ -35,8 +35,24 @@ while True:
     #Si hay datos en el teclado
     if sys.stdin.fileno() in listo:
         #Leemos
-        linea=input().strip
+        linea=input().strip()
 
         #Procesar la linea segun su contenido
-        if linea.starswith("/QUIT"):
-
+        if linea.startswith("/QUIT"):
+            print("Cerrando cliente")
+            s.close()
+            sys.exit(0)
+        elif linea.startswith("/CHAT"):
+            partes = linea.split()
+            if len(partes) == 3 and partes[2].isdigit():
+                ip_destino = partes[1]
+                puerto_destino = int(partes[2])
+                destino_chat = (ip_destino, puerto_destino)
+            else:
+                print("Uso: /CHAT <ip> <puerto>")
+        elif linea:
+            if destino_chat is None:
+                print("Antes debes hacer /CHAT <ip> <puerto>")
+            else:
+                s.sendto(f"{nombre}{linea}".encode('utf-8'), destino_chat)
+                
