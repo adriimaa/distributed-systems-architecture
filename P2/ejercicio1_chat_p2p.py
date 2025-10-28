@@ -35,7 +35,7 @@ while True:
     #Si hay datos en el teclado
     if sys.stdin.fileno() in listo:
         #Leemos
-        linea=input().strip()
+        linea=sys.stdin.readline().strip()
 
         #Procesar la linea segun su contenido
         if linea.startswith("/QUIT"):
@@ -54,5 +54,5 @@ while True:
             if destino_chat is None:
                 print("Antes debes hacer /CHAT <ip> <puerto>")
             else:
-                s.sendto(f"{nombre}{linea}".encode('utf-8'), destino_chat)
+                s.sendto(f"{nombre}: {linea}".encode('utf-8'), destino_chat)
                 
