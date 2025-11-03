@@ -1,0 +1,32 @@
+import requests
+from requests import get
+from bs4 import BeautifulSoup
+
+proxy_url = "https://proxy-cache-func-jldiaz-e9b7ddh6graybmfr.italynorth-01.azurewebsites.net/api/proxy"
+path_url = "/es/topgen.php"
+url = f"{proxy_url}{path_url}"
+
+resultadoWeb = requests.get(url)
+soup = BeautifulSoup(resultadoWeb.text, "html.parser")
+
+# print(soup.prettify()) # 1
+
+peliculasList = soup.find_all("div", class_="movie-card")
+
+
+for pelicula in peliculasList:
+   titulo = pelicula.find("div", class_="mc-title")
+   titulo = titulo.find("a").text
+
+   año = pelicula.find("span", class_="mc-year").text
+
+   puntuacion_padre = pelicula.parent.parent
+   puntuacion = puntuacion_padre.find("div", class_ = "avg-rating").text
+   
+   es_serie = pelicula.find("span", class_="type")
+   if es_serie is None:
+      etiqueta="P"
+   else:
+      etiqueta ="S"
+
+   print(f"[{etiqueta}] {titulo} ({año})  Puntuacion: {puntuacion}")

@@ -1,0 +1,5 @@
+{
+    "python.analysis.extraPaths": [
+        "./P2/S2/ejercicio1_cliente_"
+    ]
+}

@@ -3,7 +3,7 @@ import sys
 
 if len(sys.argv) > 2:
     IP_SERVIDOR = sys.argv[1]
-    PUERTO_SERVIDOR = int.argv[2]
+    PUERTO_SERVIDOR = int(sys.argv[2])
 else:
     IP_SERVIDOR = "localhost"
     PUERTO_SERVIDOR = 9999
