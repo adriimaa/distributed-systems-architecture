@@ -17,9 +17,8 @@ class FaSpiderSpider(scrapy.Spider):
             año = pelicula.css("span.mc-year::text").get()
 
             directores = pelicula.css("div.mc-director a::text").getall()
-            director = ", ".join(directores).strip()
 
-            print(f"{titulo} ({año}) - Director: {director}")
+            print(f"{titulo} ({año}) - Director: {directores}")
 
         print("-" * 80)
 
@@ -30,6 +29,5 @@ class FaSpiderSpider(scrapy.Spider):
             año = pelicula.xpath('.//span[contains(@class, "mc-year")]/text()').get()
 
             directores = pelicula.xpath('.//div[contains(@class, "mc-director")]/a/text()').getall()
-            director = ", ".join(directores).strip()
 
-            print(f"{titulo} ({año}) - Director: {director}")
+            print(f"{titulo} ({año}) - Director: {directores}")
