@@ -105,3 +105,13 @@ def url_tarea(tarea):
         'completada' : tarea['completada'],
         'uri' : url_for('get_tarea', id = tarea['id'], _external=True)}
     return tarea_actualizada 
+
+# Permitir CORS
+#
+# Añadimos esta cabecera a todas las respuestas que generemos
+@app.after_request
+def after(response):
+    response.headers.add('Access-Control-Allow-Origin','*')
+    response.headers.add('Access-Control-Allow-Headers','content-type, authorization')
+    response.headers.add('Access-Control-Allow-Methods','GET, POST, PUT, DELETE')
+    return response
