@@ -49,6 +49,7 @@ def create_tarea():
     if 'descripcion' not in request.json:
         abort(400)
     
+    estado=False
     if 'completada' in request.json:
         if type(request.json['completada'])== bool:
             estado = request.json['completada']
