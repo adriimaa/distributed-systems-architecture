@@ -6,6 +6,8 @@ __pycache__/
 # C extensions
 *.so
 
+#contraseñas
+P4/S4-BBDD/contraseñas.txt
 # Distribution / packaging
 .Python
 build/
