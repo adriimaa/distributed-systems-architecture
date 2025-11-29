@@ -26,7 +26,7 @@ def leer_usuarios_autorizados(nombre_fichero):
         usuario, contraseña = linea.split()
         autorizados[usuario] = contraseña
 
-leer_usuarios_autorizados("contraseñas.txt")
+leer_usuarios_autorizados("contrasenyas.txt")
 
 @auth.verify_password
 def verificar(usuario, contraseña):
