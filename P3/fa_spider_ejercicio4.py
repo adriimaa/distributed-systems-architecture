@@ -28,6 +28,6 @@ class FaSpiderSpider(scrapy.Spider):
 
             año = pelicula.xpath('.//span[contains(@class, "mc-year")]/text()').get()
 
-            directores = pelicula.xpath('.//div[contains(@class, "mc-director")]/a/text()').getall()
+            directores = pelicula.xpath('.//div[contains(@class, "mc-director")]//a/text()').getall()
 
             print(f"{titulo} ({año}) - Director: {directores}")
