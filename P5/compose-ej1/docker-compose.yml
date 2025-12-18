@@ -1,0 +1,64 @@
+version: '3'
+
+services:
+  #Servicio de Redis
+  redis:
+    image: redis
+    container_name: redis_container
+    ports:
+      - "6379:6379"
+
+  #Base de datos
+  mariadb:
+    image: mariadb:latest
+    container_name: mariadb_P5_db
+    environment:
+      - MYSQL_ROOT_PASSWORD=root_pass
+      - MYSQL_DATABASE=P5_db
+      - MYSQL_USER=tarea_user
+      - MYSQL_PASSWORD=tarea_pass
+    volumes:
+      - ../basedatos:/var/lib/mysql
+
+# La api daba problemas al lanzarse porque dependia de redis,
+# pusimos restart: on-failure para que cuando falle por lanzarse antes de haber terminado redis se vuelva a lanzar.
+
+  server:
+    container_name: server_container
+    restart: on-failure
+    build:
+      context: ../backend
+      dockerfile: Dockerfile_servidor
+    environment:
+      - REDIS_HOST=redis
+      - SQLALCHEMY_DATABASE_URI=mysql+pymysql://tarea_user:tarea_pass@mariadb/P5_db
+    volumes:
+      - ../backend/static:/app/static
+    depends_on:
+      - redis
+
+  #Api flask
+  api:
+    container_name: api_container
+    restart: on-failure
+    build:
+      context: ../backend
+      dockerfile: Dockerfile_api
+    environment:
+      - REDIS_HOST=redis
+      - SQLALCHEMY_DATABASE_URI=mysql+pymysql://tarea_user:tarea_pass@mariadb/P5_db
+    volumes:
+      - ../backend/static:/app/static
+    depends_on:
+      - redis
+
+  #NGINX
+  nginx:
+    image: nginx
+    container_name: nginx_container
+    ports:
+      - "80:80"
+    volumes:
+      - ../nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - api
