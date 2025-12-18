@@ -83,14 +83,8 @@ def exportar_trabajo(job):
 
     return data
 
-#Cuando lanzabamos con docker compose los 4 workers intentaban crear la misma tabla trabajos
-# y nos daba error.
-try:
-    with app.app_context():
-        db.create_all()
-except SQLAlchemyError:
-    pass
-
+with app.app_context():
+    db.create_all()
 
 #----Redis----
 redis_host = os.getenv('REDIS_HOST', 'localhost')
@@ -114,6 +108,11 @@ def create_job():
     #generar id único
     job_id = str(uuid.uuid4())
 
+    #para la base de datos
+    nuevo_job = Job(id=job_id, input_ruta=ruta, input_filtro=filtro)
+    db.session.add(nuevo_job)
+    db.session.commit()
+
     #guardamos en redis 
     # estructura set job:clave-valor
 
@@ -129,15 +128,8 @@ def create_job():
 
     redis_client.rpush('trabajos', job_id)
 
-    data = {
-        "job_id": job_id,
-        "status": "queued",
-        "input_ruta": ruta,
-        "input_filtro": filtro,
-        "uri": url_for('get_job_status', job_id=job_id, _external=True)
-    }
 
-    return jsonify(data), 201
+    return jsonify(exportar_trabajo(nuevo_job)), 201
 
 
 
