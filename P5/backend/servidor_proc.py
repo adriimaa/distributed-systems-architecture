@@ -212,3 +212,20 @@ def ejecutar_trabajo(job_id):
     except Exception as e:
         print(f"Error procesando trabajo {job_id}: {e}")
         redis_client.set(f"{job_id}:status", "failed")
+
+
+def main():
+    print("Servidor_proc INICIADO")
+
+    while True:
+        # blpop para bloquear
+        job_id = redis_client.blpop('trabajos')[1]
+        job_id = job_id.decode('utf-8')
+
+        # Lanzamos un Hilo para atender el trabajo
+        t = threading.Thread(target=ejecutar_trabajo, args=(job_id,))
+        t.start()
+
+if __name__ == "__main__":
+    time.sleep(2)
+    main()

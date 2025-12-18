@@ -1,0 +1,28 @@
+# Use una imagen base de Python
+FROM python:3.9
+
+# Establecer el directorio de trabajo en la imagen
+WORKDIR /app
+
+# Instalar las dependencias de Python necesarias
+RUN pip install Flask
+RUN pip install redis
+RUN pip install gunicorn
+RUN pip install flask-httpauth werkzeug
+RUN pip install Flask-SQLAlchemy
+RUN pip install pymysql
+
+# Copiar los archivos necesarios al contenedor
+COPY api_flask.py ./
+COPY contrasenyas.txt ./
+COPY static /app/static
+
+# Exponer el puerto 5000
+EXPOSE 5000
+
+# Variable de entorno para mostrar prints en tiempo real
+ENV PYTHONUNBUFFERED TRUE
+
+# Ejecutar la aplicación cuando se inicie el contenedor
+# Mediante gunicorn con 4 workers
+CMD ["gunicorn", "-b", "0.0.0.0:5000", "-w", "4", "api_flask:app"]
