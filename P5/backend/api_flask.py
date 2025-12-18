@@ -55,8 +55,41 @@ def no_autorizado():
     # Elegimos retornar un código 401 (Unauthorized) para este caso
 	return make_response(jsonify({'error': 'Credenciales no válidas'}), 401)
 
-#---Hay q hacer la tabla trabajos (base de datos)----
+#----Base de datos-----
 
+class Job(db.Model):
+    __tablename__ = 'trabajos'
+
+    id = db.Column(db.String(36), primary_key=True)
+    input_ruta = db.Column(db.String(200), nullable=False)
+    input_filtro = db.Column(db.String(50), default="grises")
+
+
+def exportar_trabajo(job):
+
+    status_bytes = redis_client.get(f"{job.id}:status")
+    if status_bytes:
+        status_real = status_bytes.decode('utf-8')
+    else:
+        status_real = "finished"
+
+    data = {
+        "job_id": job.id,
+        "status": status_real,
+        "input_ruta": job.input_ruta,
+        "input_filtro": job.input_filtro,
+        "uri": url_for('get_job_status', job_id=job.id, _external=True)
+    }
+
+    return data
+
+#Cuando lanzabamos con docker compose los 4 workers intentaban crear la misma tabla trabajos
+# y nos daba error.
+try:
+    with app.app_context():
+        db.create_all()
+except SQLAlchemyError:
+    pass
 
 
 #----Redis----
@@ -107,11 +140,56 @@ def create_job():
     return jsonify(data), 201
 
 
+
 @app.route('/jobs/<job_id>', methods=['GET'])
+@auth.login_required
 def get_job_status(job_id):
-    return "prueba"
+
+    existe_cliente = redis_client.exists(f"{job_id}:status")
+
+    if not existe_cliente:
+        abort(404)
+
+    status = redis_client.get(f"{job_id}:status").decode('utf-8')
+    progress = redis_client.get(f"{job_id}:progress").decode('utf-8')
+    ruta = redis_client.get(f"{job_id}:input_ruta").decode('utf-8')
+    filtro = redis_client.get(f"{job_id}:input_filtro").decode('utf-8')
+
+    response = {
+        "job_id": job_id,
+        "status": status,
+        "progress": progress,
+        "input_ruta": ruta,
+        "input_filtro": filtro,
+        "uri": url_for('get_job_status', job_id=job_id, _external=True)
+    }
+
+    if status == "finished":
+        result = redis_client.get(f"{job_id}:result")
+        if result:
+            cadena = result.decode('utf-8')
+            partes = cadena.split(";")
+
+            response["result"] = {
+                "archivo": partes[0],
+                "mensaje": partes[1] if len(partes) > 1 else ""
+            }
+
+    # Si falló
+    elif status == "failed":
+        response["error"] = "Error procesando la imagen"
 
 
+    return jsonify(response), 200
+
+@app.route('/jobs', methods=['GET'])
+@auth.login_required
+def get_jobs():
+
+    trabajos = Job.query.all()
+    exportados = [exportar_trabajo(t) for t in trabajos]
+
+    return jsonify({"trabajos": exportados})
 
 #manejo de errores
 @app.errorhandler(404)
