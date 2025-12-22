@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  #Base de Datos
+  mariadb:
+    image: mariadb:latest
+    container_name: mariadb_container
+    environment:
+      - MYSQL_ROOT_PASSWORD=root_pass
+      - MYSQL_DATABASE=tarea_db
+      - MYSQL_USER=tarea_user
+      - MYSQL_PASSWORD=tarea_pass
+    volumes:
+      - ../basedatos:/var/lib/mysql
+
+  #Flask 
+  tarea_app_flask:
+    container_name: tarea_app_flask
+    restart: on-failure
+    build:
+      context: ../gunicorn+flask
+      dockerfile: Dockerfile
+    environment:
+      - SQLALCHEMY_DATABASE_URI=mysql+pymysql://tarea_user:tarea_pass@mariadb_tarea_db/tarea_db
+    volumes:
+      - ../gunicorn+flask/static:/app/static
+    depends_on:
+      - mariadb
+
+  #Nginx
+  nginx:
+    image: nginx:latest
+    container_name: nginx_container
+    ports:
+      - "80:80"
+    volumes:
+      - ../nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - tarea_app_flask
+
