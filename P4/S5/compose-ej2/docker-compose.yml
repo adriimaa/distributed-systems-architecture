@@ -21,7 +21,7 @@ services:
       context: ../gunicorn+flask
       dockerfile: Dockerfile
     environment:
-      - SQLALCHEMY_DATABASE_URI=mysql+pymysql://tarea_user:tarea_pass@mariadb_tarea_db/tarea_db
+      - SQLALCHEMY_DATABASE_URI=mysql+pymysql://tarea_user:tarea_pass@mariadb_container/tarea_db
     volumes:
       - ../gunicorn+flask/static:/app/static
     depends_on:
