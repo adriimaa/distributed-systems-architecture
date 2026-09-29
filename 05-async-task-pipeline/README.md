@@ -1,10 +1,10 @@
-# 🚀 Módulo P5: Distributed Asynchronous Image Processing Pipeline
+# Módulo P5: Distributed Asynchronous Image Processing Pipeline
 
 Este módulo implementa un **sistema distribuido desacoplado** de alta concurrencia para procesamiento intensivo de imágenes utilizando una cola de tareas en memoria (**Redis**), un clúster de workers multiproceso (**NumPy + ProcessPoolExecutor**), una API RESTful (**Flask + Gunicorn**), persistencia relacional (**MariaDB + SQLAlchemy**) y un proxy inverso (**NGINX**).
 
 ---
 
-## 🏗️ Arquitectura del Sistema
+## Arquitectura del Sistema
 
 ```
 [ Cliente HTTP / Web / CLI ]
@@ -43,7 +43,7 @@ Este módulo implementa un **sistema distribuido desacoplado** de alta concurren
 
 ---
 
-## 🛠️ Stack Tecnológico
+## Stack Tecnológico
 * **Lenguaje:** Python 3.12
 * **Broker & Cache:** Redis 7 (`redis-py`)
 * **Base de Datos:** MariaDB (`Flask-SQLAlchemy`, `PyMySQL`)
@@ -54,7 +54,7 @@ Este módulo implementa un **sistema distribuido desacoplado** de alta concurren
 
 ---
 
-## 📡 Especificación de la API REST
+## Especificación de la API REST
 
 Todos los endpoints requieren autenticación HTTP Basic (`alumno:alumno_pass`).
 
@@ -131,7 +131,7 @@ Todos los endpoints requieren autenticación HTTP Basic (`alumno:alumno_pass`).
 
 ---
 
-## 💻 Cliente CLI de Línea de Comandos
+## Cliente CLI de Línea de Comandos
 El sistema incluye una herramienta CLI desarrollada con la librería `Click` para interactuar con la API sin necesidad de navegador:
 
 ```bash
@@ -147,11 +147,11 @@ python backend/cliente.py list
 
 ---
 
-## 🚀 Despliegue con Docker Compose
+## Despliegue con Docker Compose
 
 ```bash
-# 1. Navegar al directorio de despliegue
-cd compose-ej1
+# 1. Navegar al directorio del módulo
+cd 05-async-task-pipeline
 
 # 2. Levantar la infraestructura completa en segundo plano
 docker compose up -d --build
